@@ -160,4 +160,4 @@ df %>%
   ungroup() %>%
   select(goal, updated_tier, frequency) %>%
   pivot_wider(id_cols = "goal", names_from = "updated_tier", values_from = "frequency") %>%
-  write_csv("Data/Output Data/Tier Classification frequency December 11.csv", na = "")
+  write_csv("Tier Classification frequency December 11.csv", na = "")
