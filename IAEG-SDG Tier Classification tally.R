@@ -17,8 +17,8 @@ duplicates <- c(
 )
 
 #####
-# Read in and clean dataset
-df <- read.xlsx("Data/Input Data/Tier_Classification_of_SDG_Indicators_11_December_2019_web.xlsx", sheetIndex = 3, startRow = 2) %>%
+# Read in and clean dataset from https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
+df <- readxl::read_xlsx("Tier_Classification_of_SDG_Indicators_11_December_2019_web.xlsx", sheet = 3, skip = 1) %>%
   # Clean Indicator column so empty spaces (only have newline character and therefore have length 1)
   # Are treated as NA for later filter
   mutate(Indicator = as.character(Indicator),
@@ -31,10 +31,10 @@ df <- read.xlsx("Data/Input Data/Tier_Classification_of_SDG_Indicators_11_Decemb
   # Now have 244 observations. 232 indicators plus repeating indicators, see here
   # https://unstats.un.org/sdgs/indicators/indicators-list/
   # Select and rename appropriate indicators
-  select(indicator_code = UNSD.Indicator.Code., target = Target, indicator = Indicator,
-         initial_tier = Initial.Proposed.Tier..by.Secretariat., cust_agency = Possible.Custodian.Agency.ies.,
-         partner_agency = Partner.Agency.ies., updated_tier = Updated.Tier.Classification...by.IAEG.SDG.Members.,
-         notes = Notes...including.timing.of.review.and.explanation.for.change.in.Tier.) %>%
+  select(indicator_code = `UNSD Indicator Code*`, target = Target, indicator = Indicator,
+         initial_tier = `Initial Proposed Tier (by Secretariat)`, cust_agency = `Possible Custodian Agency(ies)`,
+         partner_agency = `Partner Agency(ies)`, updated_tier = `Updated Tier Classification \r\n(by IAEG-SDG Members)`,
+         notes = `Notes \r\n(including timing of review and explanation for change in Tier)`) %>%
   # Extract goal each indicator belongs to
   mutate(goal = as.numeric(str_extract(indicator, pattern = "^[0-9]{1,2}(?=\\.)")),
          # Clean initial_tier column by replacing single character rows with NA
