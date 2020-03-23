@@ -1,7 +1,8 @@
-library(tidyverse)
-library(xlsx)
-library(WDI)
+### Load in packages ############################# 
 
+library(tidyverse)
+
+### Prepare supplementary dataframes ############################# 
 # Create vector of indicators that are duplicates. From here
 # https://unstats.un.org/sdgs/indicators/indicators-list/
 duplicates <- c(
@@ -16,8 +17,8 @@ duplicates <- c(
   "1.5.4", "11.b.2", "13.1.3"
 )
 
-#####
-# Read in and clean dataset from https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
+### Read in and clean main dataset ############################# 
+# From https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
 df <- readxl::read_xlsx("Tier_Classification_of_SDG_Indicators_11_December_2019_web.xlsx", sheet = 3, skip = 1) %>%
   # Clean Indicator column so empty spaces (only have newline character and therefore have length 1)
   # Are treated as NA for later filter
@@ -96,14 +97,14 @@ df <- readxl::read_xlsx("Tier_Classification_of_SDG_Indicators_11_December_2019_
   ) %>%
   select(indicator_code, goal, target_num, target, indicator_num, indicator, is_duplicate, initial_tier, updated_tier, cust_agency, partner_agency, notes, num_row)
 
-# Export
+### Export main dataset ############################# 
 df %>%
   mutate(indicator_num = str_c(" ", indicator_num),
          target_num = str_c(" ", target_num)) %>%
   select(-num_row) %>%
   write_csv("Tier classification December 11 clean.csv", na = "")
 
-#####
+### Check official Tier distribution ############################# 
 # Computing the current distribution of indicators  
 # September 26 distribution
 # 104 Tier I indicators, 89 Tier II indicators and 33 Tier III indicators. 
@@ -135,7 +136,7 @@ dup_nums <- df %>%
   # Reshape back to long
   pivot_longer(`1.5.1`:`16.b.1`, names_to = "indicator_num", values_to = "dup_group")
 
-# Use original dataframe
+### Check prepared df against official Tier distribution ############################# 
 df %>%
   # Merge in group/row numbers of duplicate indicators
   left_join(dup_nums) %>%
@@ -149,9 +150,8 @@ df %>%
   # Tabulate tier numbers. Correct distribution!
   count(updated_tier)
 
-#####
-# Breakdown of Tier status of each goal
-# From here https://stackoverflow.com/questions/34860535/how-to-use-dplyr-to-generate-a-frequency-table/34860724
+### Breakdown of Tier status of each goal ############################# 
+# Frequency table solution from here https://stackoverflow.com/questions/34860535/how-to-use-dplyr-to-generate-a-frequency-table/34860724
 
 df %>% 
   count(goal, updated_tier) %>% 
