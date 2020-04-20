@@ -15,7 +15,7 @@ odw_gender <- read_csv("ODW gender-relevant SDG indicators.csv") %>%
   rename(indicator_num = indicator_code)
 
 ### Merge datasets #####
-# Merge ODW indicators with list of 244 indicators (including duplicates)
+# Merge ODW indicators with list of 247 indicators (including duplicates)
 update_tier <- df %>%
   inner_join(odw_gender)
 

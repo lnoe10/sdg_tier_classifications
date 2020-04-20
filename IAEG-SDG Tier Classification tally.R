@@ -6,20 +6,23 @@ library(tidyverse)
 # Create vector of indicators that are duplicates. From here
 # https://unstats.un.org/sdgs/indicators/indicators-list/
 duplicates <- c(
+  "7.b.1", "12.a.1",
   "8.4.1", "12.2.1",
   "8.4.2", "12.2.2",
   "10.3.1", "16.b.1",
   "10.6.1", "16.8.1",
+  "13.2.1", "13.b.1",
   "15.7.1", "15.c.1",
   "15.a.1", "15.b.1",
   "1.5.1", "11.5.1", "13.1.1",
   "1.5.3", "11.b.1", "13.1.2",
-  "1.5.4", "11.b.2", "13.1.3"
+  "1.5.4", "11.b.2", "13.1.3",
+  "4.7.1", "12.8.1", "13.3.1"
 )
 
 ### Read in and clean main dataset ############################# 
 # From https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
-df <- readxl::read_xlsx("Tier_Classification_of_SDG_Indicators_11_December_2019_web.xlsx", sheet = 3, skip = 1) %>%
+df <- readxl::read_xlsx("Tier_Classification_of_SDG_Indicators_17_April_2020_web.xlsx", sheet = 3, skip = 1) %>%
   # Clean Indicator column so empty spaces (only have newline character and therefore have length 1)
   # Are treated as NA for later filter
   mutate(Indicator = as.character(Indicator),
@@ -28,7 +31,9 @@ df <- readxl::read_xlsx("Tier_Classification_of_SDG_Indicators_11_December_2019_
            TRUE ~ Indicator
          )) %>%
   # Keep just indicator rows (gets rid of empty rows that just have Goal info)
-  filter(!is.na(Indicator)) %>%
+  # Get rid of Tier III indicators since as of April 2020, these no longer exist
+  # See here https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
+  filter(!is.na(Indicator), `Updated Tier Classification \r\n(by IAEG-SDG Members)` != "Tier III") %>%
   # Now have 244 observations. 232 indicators plus repeating indicators, see here
   # https://unstats.un.org/sdgs/indicators/indicators-list/
   # Select and rename appropriate indicators
@@ -102,7 +107,7 @@ df %>%
   mutate(indicator_num = str_c(" ", indicator_num),
          target_num = str_c(" ", target_num)) %>%
   select(-num_row) %>%
-  write_csv("Tier classification December 11 clean.csv", na = "")
+  write_csv("Tier classification April 17 clean.csv", na = "")
 
 ### Check official Tier distribution ############################# 
 # Computing the current distribution of indicators  
@@ -114,9 +119,15 @@ df %>%
 # 116 Tier I indicators, 84 Tier II indicators and 27 Tier III indicators.
 # In addition to these, there are 5 indicators that have multiple tiers
 
-# December 11 distribution
+# December 11 2019 distribution
 # 116 Tier I indicators, 92 Tier II indicators and 20 Tier III indicators. 
 # In addition to these, there are 4 indicators that have multiple tiers
+
+# 17 April 2020 distribution
+# 115 Tier I indicators, 95 Tier II indicators and 
+# 2 indicators that have multiple tiers (different components of the 
+# indicator are classified into different tiers). There are 19 
+# indicators with tiering pending a data availability review.
 
 # This df will give every duplicated indicator group the same row number
 dup_nums <- df %>%
@@ -127,12 +138,13 @@ dup_nums <- df %>%
   # Reshape wide
   pivot_wider(names_from = "indicator_num", values_from = num_row) %>%
   # Set appropriate indicator row numbers equal to each other
-  mutate(`12.2.1` = `8.4.1`, `12.2.2` = `8.4.2`,
-         `16.b.1` = `10.3.1`, `16.8.1` = `10.6.1`,
+  mutate(`12.a.1` = `7.b.1`, `12.2.1` = `8.4.1`, `12.2.2` = `8.4.2`,
+         `16.b.1` = `10.3.1`, `16.8.1` = `10.6.1`, `13.b.1` = `13.2.1`,
          `15.c.1` = `15.7.1`, `15.b.1` = `15.a.1`,
          `11.5.1` = `1.5.1`, `13.1.1` = `1.5.1`,
          `11.b.1` = `1.5.3`, `13.1.2` = `1.5.3`,
-         `11.b.2` = `1.5.4`, `13.1.3` = `1.5.4`) %>%
+         `11.b.2` = `1.5.4`, `13.1.3` = `1.5.4`,
+         `13.3.1` = `4.7.1`, `12.8.1` = `4.7.1`) %>%
   # Reshape back to long
   pivot_longer(`1.5.1`:`16.b.1`, names_to = "indicator_num", values_to = "dup_group")
 
@@ -160,4 +172,4 @@ df %>%
   ungroup() %>%
   select(goal, updated_tier, frequency) %>%
   pivot_wider(id_cols = "goal", names_from = "updated_tier", values_from = "frequency") %>%
-  write_csv("Tier Classification frequency December 11.csv", na = "")
+  write_csv("Tier Classification frequency April 17.csv", na = "")
