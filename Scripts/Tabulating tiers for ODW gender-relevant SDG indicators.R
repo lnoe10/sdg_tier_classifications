@@ -8,7 +8,7 @@
 # This loads all 84 ODW SDG -relevant indicators that are proposed by
 # UN Women and added to by ODW (subset AGI - additional gender indicators). 
 # These 84 were used for the BtG-LAC exercise
-odw_gender <- read_csv("ODW gender-relevant SDG indicators.csv") %>%
+odw_gender <- read_csv("Input/ODW gender-relevant SDG indicators.csv") %>%
   # Remove white space before and after indicator code to enable merging
   mutate(indicator_code = str_trim(indicator_code)) %>%
   # Rename variable to proper name for merging
