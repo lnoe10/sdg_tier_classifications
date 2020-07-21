@@ -22,7 +22,7 @@ duplicates <- c(
 
 ### Read in and clean main dataset ############################# 
 # From https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
-df <- readxl::read_xlsx("Input/Tier_Classification_of_SDG_Indicators_17_April_2020_web.xlsx", sheet = 3, skip = 1) %>%
+df <- readxl::read_xlsx("Input/Tier_Classification_of_SDG_Indicators_17_July_2020_web.xlsx", sheet = 3, skip = 1) %>%
   # Clean Indicator column so empty spaces (only have newline character and therefore have length 1)
   # Are treated as NA for later filter
   mutate(Indicator = as.character(Indicator),
@@ -107,7 +107,7 @@ df %>%
   mutate(indicator_num = str_c(" ", indicator_num),
          target_num = str_c(" ", target_num)) %>%
   select(-num_row) %>%
-  write_csv("Output/Tier classification April 17 clean.csv", na = "")
+  write_csv("Output/Tier classification 17 July clean.csv", na = "")
 
 ### Check official Tier distribution ############################# 
 # Computing the current distribution of indicators  
@@ -128,6 +128,11 @@ df %>%
 # 2 indicators that have multiple tiers (different components of the 
 # indicator are classified into different tiers). There are 19 
 # indicators with tiering pending a data availability review.
+
+# 17 July 2020 distribution
+# 123 Tier I indicators, 106 Tier II indicators and 
+# 2 indicators that have multiple tiers (different components of the 
+# indicator are classified into different tiers).
 
 # This df will give every duplicated indicator group the same row number
 dup_nums <- df %>%
@@ -172,4 +177,4 @@ df %>%
   ungroup() %>%
   select(goal, updated_tier, frequency) %>%
   pivot_wider(id_cols = "goal", names_from = "updated_tier", values_from = "frequency") %>%
-  write_csv("Output/Tier Classification frequency April 17.csv", na = "")
+  write_csv("Output/Tier Classification frequency 17 July.csv", na = "")
