@@ -174,11 +174,11 @@ df %>%
 ### Breakdown of Tier status of each goal ############################# 
 # Frequency table solution from here https://stackoverflow.com/questions/34860535/how-to-use-dplyr-to-generate-a-frequency-table/34860724
 
-df %>% 
+(df %>% 
   count(goal, updated_tier) %>% 
   group_by(goal) %>% 
   mutate(frequency = prop.table(n)) %>%
   ungroup() %>%
   select(goal, updated_tier, frequency) %>%
   pivot_wider(id_cols = "goal", names_from = "updated_tier", values_from = "frequency") %>%
-  write_csv("Output/Tier Classification frequency 17 July.csv", na = "")
+  write_csv("Output/Tier Classification frequency 21 Mar 2021.csv", na = ""))
