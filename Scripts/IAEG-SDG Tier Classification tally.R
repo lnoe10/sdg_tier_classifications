@@ -31,10 +31,8 @@ df <- readxl::read_xlsx("Input/Tier_Classification_of_SDG_Indicators_29_Mar_2021
            TRUE ~ Indicator
          )) %>%
   # Keep just indicator rows (gets rid of empty rows that just have Goal info)
-  # Get rid of Tier III indicators since as of April 2020, these no longer exist
-  # and only exist crossed-out in the excel file, which R does not recognize
   # See here https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
-  filter(!is.na(Indicator), `Updated Tier Classification \r\n(by IAEG-SDG Members)` != "Tier III") %>%
+  filter(!is.na(Indicator)) %>%
   # Now have 247 observations. 231 indicators plus repeating indicators, see here
   # https://unstats.un.org/sdgs/indicators/indicators-list/
   # Select and rename appropriate indicators
