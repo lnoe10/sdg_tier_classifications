@@ -133,6 +133,11 @@ df %>%
 # 2 indicators that have multiple tiers (different components of the 
 # indicator are classified into different tiers).
 
+# 21 Mar 2021 distribution
+# 130 Tier indicators, 97 Tier II indicators and
+# 4 indicators that have multiple tiers (different components of the
+# indicators are classified into different tiers).
+
 # This df will give every duplicated indicator group the same row number
 dup_nums <- df %>%
   # Keep only duplicated indicators
