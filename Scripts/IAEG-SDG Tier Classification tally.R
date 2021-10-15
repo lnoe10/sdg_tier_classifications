@@ -36,10 +36,10 @@ df <- readxl::read_xlsx("Input/Tier_Classification_of_SDG_Indicators_29_Mar_2021
   # Now have 247 observations. 231 indicators plus repeating indicators, see here
   # https://unstats.un.org/sdgs/indicators/indicators-list/
   # Select and rename appropriate indicators
-  select(indicator_code = `UNSD Indicator Code*`, target = Target, indicator = Indicator,
-         initial_tier = `Initial Proposed Tier (by Secretariat)`, cust_agency = `Possible Custodian Agency(ies)`,
-         partner_agency = `Partner Agency(ies)`, updated_tier = `Updated Tier Classification \r\n(by IAEG-SDG Members)`,
-         notes = `Notes \r\n(including timing of review and explanation for change in Tier)`) %>%
+  select(indicator_code = `UNSD Indicator Code^`, target = Target, indicator = Indicator,
+         initial_tier = `Initial Proposed Tier (by Secretariat)`, cust_agency = `Custodian Agency(ies)`,
+         partner_agency = `Partner Agency(ies)`, updated_tier = `Tier Classification`,
+         notes = `Notes\r\n(post-2020 comprehensive review round; explanation and timing of updates or changes)`) %>%
   # Extract goal each indicator belongs to
   mutate(goal = as.numeric(str_extract(indicator, pattern = "^[0-9]{1,2}(?=\\.)")),
          # Clean initial_tier column by replacing single character rows with NA
