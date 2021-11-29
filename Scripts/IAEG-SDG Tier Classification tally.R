@@ -100,9 +100,23 @@ df <- readxl::read_xlsx("Input/Tier_Classification_of_SDG_Indicators_29_Mar_2021
     target_num = str_extract(target, pattern = "^[0-9]{1,2}\\.([0-9]{1,2}|[a-z])"),
     # Create row number indicator that give each indicator its own number.
     # Can then be used to get duplicates out of the dataset using df below
-    num_row = row_number()
+    num_row = row_number(),
+    # Create binary for whether or not SDG indicators are gender-specific or not,
+    # according to https://www.unwomen.org/en/digital-library/publications/2021/09/progress-on-the-sustainable-development-goals-the-gender-snapshot-2021
+    gender_specific = case_when(
+      indicator_num %in% c("1.1.1", "1.2.1", "1.2.2", "1.3.1", "1.4.2", "2.2.3", "2.3.2",
+                           "3.1.1", "3.1.2", "3.3.1", "3.7.1", "3.7.2", "3.8.1", "4.1.1",
+                           "4.2.1", "4.2.2", "4.3.1", "4.5.1", "4.6.1", "4.7.1", "4.a.1",
+                           "5.1.1", "5.2.1", "5.2.2", "5.3.1", "5.3.2", "5.4.1", "5.5.1",
+                           "5.5.2", "5.6.1", "5.6.2", "5.a.1", "5.a.2", "5.b.1", "5.c.1",
+                           "8.3.1", "8.5.1", "8.5.2", "8.7.1", "8.8.1", "8.8.2", "10.2.1",
+                           "11.2.1", "11.7.1", "11.7.2", "13.3.1", "16.1.1", "16.1.2",
+                           "16.2.2", "16.2.3", "16.7.1", "16.7.2") ~ "Gender-specific",
+      TRUE ~ "Not gender-specific"
+    )
   ) %>%
-  select(indicator_code, goal, target_num, target, indicator_num, indicator, is_duplicate, initial_tier, updated_tier, cust_agency, partner_agency, notes, num_row)
+  select(indicator_code, goal, target_num, target, indicator_num, indicator, is_duplicate, 
+         initial_tier, updated_tier, cust_agency, partner_agency, notes, gender_specific, num_row)
 
 ### Export main dataset ############################# 
 df %>%
