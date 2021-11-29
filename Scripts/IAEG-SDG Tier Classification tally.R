@@ -2,6 +2,9 @@
 
 library(tidyverse)
 
+# Insert your wd path based on cloning this repository
+setwd("C:/Users/loren/Documents/GitHub/sdg_tier_classifications")
+
 ### Prepare supplementary dataframes ############################# 
 # Create vector of indicators that are duplicates. From here
 # https://unstats.un.org/sdgs/indicators/indicators-list/
