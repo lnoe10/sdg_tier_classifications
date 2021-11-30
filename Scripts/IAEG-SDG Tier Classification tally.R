@@ -111,8 +111,8 @@ df <- readxl::read_xlsx("Input/Tier_Classification_of_SDG_Indicators_29_Mar_2021
                            "5.5.2", "5.6.1", "5.6.2", "5.a.1", "5.a.2", "5.b.1", "5.c.1",
                            "8.3.1", "8.5.1", "8.5.2", "8.7.1", "8.8.1", "8.8.2", "10.2.1",
                            "11.2.1", "11.7.1", "11.7.2", "13.3.1", "16.1.1", "16.1.2",
-                           "16.2.2", "16.2.3", "16.7.1", "16.7.2") ~ "Gender-specific",
-      TRUE ~ "Not gender-specific"
+                           "16.2.2", "16.2.3", "16.7.1", "16.7.2") ~ "Yes",
+      TRUE ~ "No"
     ),
     # Create binaries for Bridging the Gap indicators, see Table A1 from Bridging the Gap methodology Report
     # https://opendatawatch.com/publications/bridging-the-gap-methodology-report/#_Toc46928098
