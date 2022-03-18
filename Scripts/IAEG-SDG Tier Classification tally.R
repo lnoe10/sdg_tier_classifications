@@ -25,7 +25,7 @@ duplicates <- c(
 
 ### Read in and clean main dataset ############################# 
 # From https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
-df <- readxl::read_xlsx("Input/Tier_Classification_of_SDG_Indicators_29_Mar_2021_web.xlsx", sheet = 5, skip = 1) %>%
+df <- readxl::read_xlsx("Input/Tier Classification of SDG Indicators_4 Feb 2022_web.xlsx", sheet = 3, skip = 1) %>%
   # Clean Indicator column so empty spaces (only have newline character and therefore have length 1)
   # Are treated as NA for later filter
   mutate(Indicator = as.character(Indicator),
@@ -174,7 +174,7 @@ df %>%
   mutate(indicator_num = str_c(" ", indicator_num),
          target_num = str_c(" ", target_num)) %>%
   select(-num_row) %>%
-  write_csv("Output/Tier classification 29 Mar clean.csv", na = "")
+  write_csv("Output/Tier classification 4 Feb clean.csv", na = "")
 
 ### Check official Tier distribution ############################# 
 # Computing the current distribution of indicators  
