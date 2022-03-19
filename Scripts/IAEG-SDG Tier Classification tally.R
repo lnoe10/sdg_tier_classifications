@@ -255,3 +255,26 @@ df %>%
   select(goal, updated_tier, frequency) %>%
   pivot_wider(id_cols = "goal", names_from = "updated_tier", values_from = "frequency") %>%
   write_csv("Output/Tier Classification frequency 4 Feb 2022.csv", na = ""))
+
+### List all custodian agencies #####
+(df  %>% # Merge in group/row numbers of duplicate indicators
+  left_join(dup_nums) %>%
+  # Replace existing row numbers with group numbers for duplicate indicators
+  mutate(num_row = case_when(
+    indicator_num %in% duplicates ~ dup_group,
+    TRUE ~ num_row
+  )) %>%
+  # Reduce dataset to unique row numbers, will reduce from 247 to 231
+  distinct(num_row, .keep_all = TRUE) %>% 
+  # Create list column based on custodian agencies by indicator being separated by comma
+  mutate(new_cust = str_split(cust_agency, pattern = ",")) %>% 
+  # Keep only new column
+  select(new_cust) %>% 
+  # Create single column out of all values in list column
+  unnest_longer(new_cust) %>% 
+  # Clean column of custodian names
+  mutate(new_cust = str_trim(new_cust)) %>% 
+  # Tabulate number of indicators per custodian agency
+  count(new_cust, name = "num_indicators") %>% 
+  # Export (Need additional cleaning by hand)
+  write_csv("Output/List of custodian agencies.csv"))
