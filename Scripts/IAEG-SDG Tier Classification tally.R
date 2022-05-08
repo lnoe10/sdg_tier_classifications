@@ -26,7 +26,7 @@ duplicates <- c(
 
 ### Read in and clean main dataset ############################# 
 # From https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
-df <- readxl::read_xlsx("Input/Tier Classification of SDG Indicators_4 Feb 2022_web.xlsx", sheet = 3, skip = 1) %>%
+df <- readxl::read_xlsx("Input/Tier Classification of SDG Indicators_6 Apr 2022_web.xlsx", sheet = 3, skip = 1) %>%
   # Clean Indicator column so empty spaces (only have newline character and therefore have length 1)
   # Are treated as NA for later filter
   mutate(Indicator = as.character(Indicator),
@@ -175,7 +175,7 @@ df %>%
   mutate(indicator_num = str_c(" ", indicator_num),
          target_num = str_c(" ", target_num)) %>%
   select(-num_row) %>%
-  write_csv("Output/Tier classification 4 Feb clean.csv", na = "")
+  write_csv("Output/Tier classification 6 Apr clean.csv", na = "")
 
 ### Check official Tier distribution ############################# 
 # Computing the current distribution of indicators  
@@ -255,7 +255,7 @@ df %>%
   ungroup() %>%
   select(goal, updated_tier, frequency) %>%
   pivot_wider(id_cols = "goal", names_from = "updated_tier", values_from = "frequency") %>%
-  write_csv("Output/Tier Classification frequency 4 Feb 2022.csv", na = ""))
+  write_csv("Output/Tier Classification frequency 6 Apr 2022.csv", na = ""))
 
 ### List all custodian agencies #####
 (df  %>% # Merge in group/row numbers of duplicate indicators
