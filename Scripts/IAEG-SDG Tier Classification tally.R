@@ -24,9 +24,12 @@ duplicates <- c(
   "4.7.1", "12.8.1", "13.3.1"
 )
 
+# Define version
+version  <- "6 Apr 2022"
+
 ### Read in and clean main dataset ############################# 
 # From https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
-df <- readxl::read_xlsx("Input/Tier Classification of SDG Indicators_6 Apr 2022_web.xlsx", sheet = 4, skip = 1) %>%
+df <- readxl::read_xlsx(str_c("Input/Tier Classification of SDG Indicators_", version, "_web.xlsx"), sheet = 4, skip = 1) %>%
   # Clean Indicator column so empty spaces (only have newline character and therefore have length 1)
   # Are treated as NA for later filter
   mutate(Indicator = as.character(Indicator),
@@ -175,7 +178,7 @@ df %>%
   mutate(indicator_num = str_c(" ", indicator_num),
          target_num = str_c(" ", target_num)) %>%
   select(-num_row) %>%
-  write_csv("Output/Tier classification 6 Apr clean.csv", na = "")
+  write_csv(str_c("Output/Tier classification ", version, " clean.csv"), na = "")
 
 ### Check official Tier distribution ############################# 
 # Computing the current distribution of indicators  
@@ -263,7 +266,7 @@ df %>%
   ungroup() %>%
   select(goal, updated_tier, frequency) %>%
   pivot_wider(id_cols = "goal", names_from = "updated_tier", values_from = "frequency") %>%
-  write_csv("Output/Tier Classification frequency 6 Apr 2022.csv", na = ""))
+  write_csv(str_c("Output/Tier Classification frequency ", version, ".csv"), na = ""))
 
 ### List all custodian agencies #####
 (df  %>% # Merge in group/row numbers of duplicate indicators
@@ -286,4 +289,4 @@ df %>%
   # Tabulate number of indicators per custodian agency
   count(new_cust, name = "num_indicators") %>% 
   # Export (Need additional cleaning by hand)
-  write_csv("Output/List of custodian agencies.csv"))
+  write_csv(str_c("Output/List of custodian agencies ", version, ".csv")))
