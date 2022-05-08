@@ -212,6 +212,13 @@ df %>%
 # 4 indicators that have multiple tiers (different components of the
 # indicators are classified into different tiers).
 
+# 6 Apr 2022 distribution
+# No official distribution
+# 11.5.3 indicator is new, split out of existing indicator 11.5.2, but without
+# Tier assignment. Current Tier distribution is the same as 4 Feb distribution otherwise
+# 136 Tier I indicators, 90 Tier II indicators (maybe 91 if 11.5.3 is also Tier II as its original
+# 11.5.2 indicator was), 4 indicators that have multiple tiers
+
 # This df will give every duplicated indicator group the same row number
 dup_nums <- df %>%
   # Keep only duplicated indicators
