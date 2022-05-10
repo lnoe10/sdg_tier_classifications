@@ -40,7 +40,7 @@ df <- readxl::read_xlsx(str_c("Input/Tier Classification of SDG Indicators_", ve
   # Keep just indicator rows (gets rid of empty rows that just have Goal info)
   # See here https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
   filter(!is.na(Indicator)) %>%
-  # Now have 247 observations. 231 indicators plus repeating indicators, see here
+  # Now have 248 observations. 231 indicators plus repeating indicators, see here
   # https://unstats.un.org/sdgs/indicators/indicators-list/
   # Select and rename appropriate indicators
   select(indicator_code = `UNSD Indicator Code^`, target = Target, indicator = Indicator,
@@ -251,7 +251,7 @@ df %>%
     indicator_num %in% duplicates ~ dup_group,
     TRUE ~ num_row
   )) %>%
-  # Reduce dataset to unique row numbers, will reduce from 247 to 231
+  # Reduce dataset to unique row numbers, will reduce from 248 to 231
   distinct(num_row, .keep_all = TRUE) %>%
   # Tabulate tier numbers. Correct distribution!
   count(updated_tier)
@@ -276,7 +276,7 @@ df %>%
     indicator_num %in% duplicates ~ dup_group,
     TRUE ~ num_row
   )) %>%
-  # Reduce dataset to unique row numbers, will reduce from 247 to 231
+  # Reduce dataset to unique row numbers, will reduce from 248 to 231
   distinct(num_row, .keep_all = TRUE) %>% 
   # Create list column based on custodian agencies by indicator being separated by comma
   mutate(new_cust = str_split(cust_agency, pattern = ",")) %>% 
