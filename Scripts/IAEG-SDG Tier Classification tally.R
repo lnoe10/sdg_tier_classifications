@@ -178,7 +178,7 @@ df %>%
   mutate(indicator_num = str_c(" ", indicator_num),
          target_num = str_c(" ", target_num)) %>%
   select(-num_row) %>%
-  write_csv(str_c("Output/Tier classification ", version, " clean.csv"), na = "")
+  write_csv(str_c("Output/Tier classification", version, "clean.csv", sep = " "), na = "")
 
 ### Check official Tier distribution ############################# 
 # Computing the current distribution of indicators  
