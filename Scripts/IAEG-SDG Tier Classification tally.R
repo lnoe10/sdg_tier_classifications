@@ -25,7 +25,7 @@ duplicates <- c(
 )
 
 # Define version
-version  <- "6 Apr 2022"
+version  <- "9 Jun 2022"
 
 ### Read in and clean main dataset ############################# 
 # From https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
@@ -189,7 +189,7 @@ df <- readxl::read_xlsx(str_c("Input/Tier Classification of SDG Indicators_", ve
     )
   ) %>%
   select(indicator_code, goal, target_num, target, indicator_num, indicator, is_duplicate, 
-         initial_tier, updated_tier, cust_agency, partner_agency, notes, unw_gender_specific, btg_afr, btg_lac, btg_eap, num_row)
+         initial_tier, updated_tier, cust_agency, partner_agency, notes, unw_gender_specific, iaeg_gender_specific, btg_afr, btg_lac, btg_eap, num_row)
 
 ### Export main dataset ############################# 
 df %>%
