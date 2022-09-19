@@ -106,7 +106,7 @@ df <- readxl::read_xlsx(str_c("Input/Tier Classification of SDG Indicators_", ve
     # Can then be used to get duplicates out of the dataset using df below
     num_row = row_number(),
     # Create binary for whether or not SDG indicators are gender-specific or not,
-    # according to https://www.unwomen.org/en/digital-library/publications/2021/09/progress-on-the-sustainable-development-goals-the-gender-snapshot-2021
+    # according to https://data.unwomen.org/publications/progress-sustainable-development-goals-gender-snapshot-2022
     unw_gender_specific = case_when(
       indicator_num %in% c("1.1.1", "1.2.1", "1.2.2", "1.3.1", "1.4.2", "2.2.3", "2.3.2",
                            "3.1.1", "3.1.2", "3.3.1", "3.7.1", "3.7.2", "3.8.1", "4.1.1",
