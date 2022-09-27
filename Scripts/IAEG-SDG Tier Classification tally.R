@@ -30,75 +30,83 @@ version  <- "9 Jun 2022"
 ### Read in and clean main dataset ############################# 
 # From https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
 df <- readxl::read_xlsx(str_c("Input/Tier Classification of SDG Indicators_", version, "_web.xlsx"), sheet = 4, skip = 1) %>%
-  # Clean Indicator column so empty spaces (only have newline character and therefore have length 1)
-  # Are treated as NA for later filter
-  mutate(Indicator = as.character(Indicator),
-         Indicator = case_when(
-           str_length(Indicator) == 1 ~ NA_character_,
-           TRUE ~ Indicator
-         )) %>%
-  # Keep just indicator rows (gets rid of empty rows that just have Goal info)
-  # See here https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
+  # Pre-clean select columns
+  mutate(
+    # Clean Indicator column so empty spaces (only have newline character and therefore have length 1)
+    # are treated as NA for later filter
+    Indicator = as.character(Indicator),
+    Indicator = case_when(
+      str_length(Indicator) == 1 ~ NA_character_,
+      TRUE ~ Indicator
+      ),
+    # Extract Goal information into separate column
+    goal_info = str_extract(Target, "^Goal [0-9]{1,2}.*"),
+    # Clean target column by replacing single character rows with NA for easier filling
+    Target = as.character(Target),
+    Target = case_when(
+      str_length(Target) == 1 ~ NA_character_,
+      TRUE ~ Target
+      )) %>%
+  # Carryforward goal and target designations to match with indicators.
+  fill(c(goal_info, Target), .direction = "down") %>%
+  # Keep just indicator rows (gets rid of empty rows that just have Goal and extra info)
+  # Confirm number here https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
   filter(!is.na(Indicator)) %>%
   # Now have 248 observations. 231 indicators plus repeating indicators, see here
   # https://unstats.un.org/sdgs/indicators/indicators-list/
   # Select and rename appropriate indicators
-  select(indicator_code = `UNSD Indicator Code^`, target = Target, indicator = Indicator,
+  select(indicator_code = `UNSD Indicator Code^`, goal_info, target = Target, indicator = Indicator,
          initial_tier = `Initial Proposed Tier (by Secretariat)`, cust_agency = `Custodian Agency(ies)`,
          partner_agency = `Partner Agency(ies)`, updated_tier = `Tier Classification`,
          notes = `Notes\r\n(post-2020 comprehensive review round; explanation and timing of updates or changes)`) %>%
-  # Extract goal each indicator belongs to
-  mutate(goal = as.numeric(str_extract(indicator, pattern = "^[0-9]{1,2}(?=\\.)")),
-         # Clean initial_tier column by replacing single character rows with NA
-         # And removing newline characters
-         initial_tier = as.character(initial_tier),
-         initial_tier = case_when(
-           str_length(initial_tier) == 1 ~ NA_character_,
-           TRUE ~ initial_tier
-         ),
-         initial_tier = str_replace(initial_tier, pattern = "\\n|\\s\\n", ""),
-         # Clean cust_agency column by replacing single character rows with NA
-         cust_agency = as.character(cust_agency),
-         cust_agency = case_when(
-           str_length(cust_agency) == 1 ~ NA_character_,
-           TRUE ~ cust_agency
-         ),
-         cust_agency = str_trim(str_replace(cust_agency, "\\r?\\n|\\r", "")),
-         # Clean partner_agency column by replacing single character rows with NA
-         partner_agency = as.character(partner_agency),
-         partner_agency = case_when(
-           str_length(partner_agency) == 1 ~ NA_character_,
-           TRUE ~ partner_agency
-         ),
-         partner_agency = str_trim(str_replace(partner_agency, "\\r?\\n|\\r", "")),
-         # Clean updated_tier column by replacing single character rows with NA
-         # And removing newline characters
-         updated_tier = as.character(updated_tier),
-         updated_tier = case_when(
-           str_length(updated_tier) == 1 ~ NA_character_,
-           TRUE ~ updated_tier
-         ),
-         updated_tier = str_replace(updated_tier, pattern = "\\n|\\s\\n", ""),
-         # Clean target column by replacing single character rows with NA
-         target = as.character(target),
-         target = case_when(
-           str_length(target) == 1 ~ NA_character_,
-           TRUE ~ target
-         ),
-         # Extract indicator number from indicator field to classify
-         # doubles and filter for indicators easier
-         indicator_num = str_extract(indicator, pattern = "^[0-9]{1,2}\\.([0-9]{1,2}|[a-z])\\.[0-9]"),
-         # Create binary variable for duplicates
-         # Listing is from here https://unstats.un.org/sdgs/indicators/indicators-list/
-         # As is arrangement of duplicate with what.
-         # Can think about categorical variable signifying number of duplicates (2|3)
-         is_duplicate = case_when(
-           indicator_num %in% duplicates ~ 1,
-           TRUE ~ 0
-         )) %>%
-  # Carryforward target designations to match with indicators.
-  fill(target, .direction = "down") %>%
+  # Clean and create columns
   mutate(
+    # Create Goal number and Goal text columns
+    goal_num = as.numeric(str_extract(goal_info, pattern = "[0-9]{1,2}")),
+    goal_text = str_extract(goal_info, pattern = "(?<=\\. ).*"),
+    # Take out footnote in description of Goal 17
+    goal_text = str_remove(goal_text, "\\[a\\]"),
+    # Clean initial_tier column by replacing single character rows with NA
+    # And removing newline characters
+    initial_tier = as.character(initial_tier),
+    initial_tier = case_when(
+      str_length(initial_tier) == 1 ~ NA_character_,
+      TRUE ~ initial_tier
+      ),
+    initial_tier = str_replace(initial_tier, pattern = "\\n|\\s\\n", ""),
+    # Clean cust_agency column by replacing single character rows with NA
+    cust_agency = as.character(cust_agency),
+    cust_agency = case_when(
+      str_length(cust_agency) == 1 ~ NA_character_,
+      TRUE ~ cust_agency
+      ),
+    cust_agency = str_trim(str_replace(cust_agency, "\\r?\\n|\\r", "")),
+    # Clean partner_agency column by replacing single character rows with NA
+    partner_agency = as.character(partner_agency),
+    partner_agency = case_when(
+      str_length(partner_agency) == 1 ~ NA_character_,
+      TRUE ~ partner_agency
+      ),
+    partner_agency = str_trim(str_replace(partner_agency, "\\r?\\n|\\r", "")),
+    # Clean updated_tier column by replacing single character rows with NA
+    # And removing newline characters
+    updated_tier = as.character(updated_tier),
+    updated_tier = case_when(
+      str_length(updated_tier) == 1 ~ NA_character_,
+      TRUE ~ updated_tier
+      ),
+    updated_tier = str_replace(updated_tier, pattern = "\\n|\\s\\n", ""),
+    # Extract indicator number from indicator field to classify
+    # doubles and filter for indicators easier
+    indicator_num = str_extract(indicator, pattern = "^[0-9]{1,2}\\.([0-9]{1,2}|[a-z])\\.[0-9]"),
+    # Create binary variable for duplicates
+    # Listing is from here https://unstats.un.org/sdgs/indicators/indicators-list/
+    # As is arrangement of duplicate with what.
+    # Can think about categorical variable signifying number of duplicates (2|3)
+    is_duplicate = case_when(
+      indicator_num %in% duplicates ~ 1,
+      TRUE ~ 0
+      ),
     # Extract target number from target field to classify
     # doubles and filter for target easier
     target_num = str_extract(target, pattern = "^[0-9]{1,2}\\.([0-9]{1,2}|[a-z])"),
@@ -187,7 +195,7 @@ df <- readxl::read_xlsx(str_c("Input/Tier Classification of SDG Indicators_", ve
       TRUE ~ "No"
     )
   ) %>%
-  select(indicator_code, goal, target_num, target, indicator_num, indicator, is_duplicate, 
+  select(indicator_code, goal_num, goal_text, target_num, target, indicator_num, indicator, is_duplicate, 
          initial_tier, updated_tier, cust_agency, partner_agency, notes, unw_gender_specific, iaeg_gender_specific, btg_afr, btg_lac, btg_eap, num_row)
 
 ### Export main dataset ############################# 
