@@ -285,12 +285,12 @@ df %>%
 # Frequency table solution from here https://stackoverflow.com/questions/34860535/how-to-use-dplyr-to-generate-a-frequency-table/34860724
 
 (df %>% 
-  count(goal, updated_tier) %>% 
-  group_by(goal) %>% 
+  count(goal_num, goal_text, updated_tier) %>% 
+  group_by(goal_num, goal_text) %>% 
   mutate(frequency = prop.table(n)) %>%
   ungroup() %>%
-  select(goal, updated_tier, frequency) %>%
-  pivot_wider(id_cols = "goal", names_from = "updated_tier", values_from = "frequency") %>%
+  select(goal_num, goal_text, updated_tier, frequency) %>%
+  pivot_wider(id_cols = c("goal_num", "goal_text"), names_from = "updated_tier", values_from = "frequency") %>%
   write_csv(str_c("Output/Tier Classification frequency ", version, ".csv"), na = ""))
 
 ### List all custodian agencies #####
