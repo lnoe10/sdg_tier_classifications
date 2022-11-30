@@ -25,11 +25,15 @@ duplicates <- c(
 )
 
 # Define version
-version  <- "9 Jun 2022"
+version  <- "30 Nov 2022"
 
 ### Read in and clean main dataset ############################# 
 # From https://unstats.un.org/sdgs/iaeg-sdgs/tier-classification/
-df <- readxl::read_xlsx(str_c("Input/Tier Classification of SDG Indicators_", version, "_web.xlsx"), sheet = 4, skip = 1) %>%
+# 30 Nov 2022 update we have to specify the box we want Excel to read because the Excel file
+# has THE ENTIRE TABLE COPIED AGAIN TO THE RIGHT, which is picked up if we read in the file normally
+# The current range function specifies that we are drawing a box with a specified point
+# At cell I2 and taking everything to the left. See here https://readxl.tidyverse.org/reference/cell-specification.html
+df <- readxl::read_xlsx(str_c("Input/Tier Classification of SDG Indicators_", version, "_web.xlsx"), sheet = 4, range = cellranger::cell_limits(c(2, NA), c(NA, 9))) %>%
   # Pre-clean select columns
   mutate(
     # Clean Indicator column so empty spaces (only have newline character and therefore have length 1)
@@ -246,6 +250,11 @@ df %>%
 # Tier assignment. Current Tier distribution is the same as 4 Feb distribution otherwise
 # 136 Tier I indicators, 90 Tier II indicators (maybe 91 if 11.5.3 is also Tier II as its original
 # 11.5.2 indicator was), 4 indicators that have multiple tiers
+
+# 30 Nov 2022 distribution from official site to check against below
+# As of 30 November 2022: The updated tier classification contains 148 Tier I indicators, 
+# 77 Tier II indicators and 6 indicators that have multiple tiers (different components of 
+# the indicator are classified into different tiers). 
 
 # This df will give every duplicated indicator group the same row number
 dup_nums <- df %>%
