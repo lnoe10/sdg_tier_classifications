@@ -1,0 +1,18 @@
+goal_num,goal_text,Tier I,Tier I/II depending on service,Tier II,Tier I/II depending on indice,Tier I (a)/Tier II (b),"Tier I (a)/Tier II (b, c)",Tier I/II depending on resource
+1,End poverty in all its forms everywhere,0.6153846153846154,0.07692307692307693,0.3076923076923077,,,,
+2,"End hunger, achieve food security and improved nutrition and promote sustainable agriculture",0.7142857142857143,,0.2857142857142857,,,,
+3,Ensure healthy lives and promote well-being for all at all ages,0.8928571428571429,,0.10714285714285714,,,,
+4,Ensure inclusive and equitable quality education and promote lifelong learning opportunities for all,0.4166666666666667,,0.5,0.08333333333333333,,,
+5,Achieve gender equality and empower all women and girls,0.42857142857142855,,0.5714285714285714,,,,
+6,Ensure availability and sustainable management of water and sanitation for all,0.7272727272727273,,0.18181818181818182,,0.09090909090909091,,
+7,"Ensure access to affordable, reliable, sustainable and modern energy for all",1,,,,,,
+8,"Promote sustained, inclusive and sustainable economic growth, full and productive employment and decent work for all",0.5625,,0.4375,,,,
+9,"Build resilient infrastructure, promote inclusive and sustainable industrialization and foster innovation",0.8333333333333334,,0.16666666666666666,,,,
+10,Reduce inequality within and among countries,0.7142857142857143,,0.2857142857142857,,,,
+11,"Make cities and human settlements inclusive, safe, resilient and sustainable",0.5333333333333333,,0.4666666666666667,,,,
+12,Ensure sustainable consumption and production patterns,0.38461538461538464,,0.6153846153846154,,,,
+13,Take urgent action to combat climate change and its impacts,0.375,,0.625,,,,
+14,"Conserve and sustainably use the oceans, seas and marine resources for sustainable development",0.5,,0.5,,,,
+15,"Protect, restore and promote sustainable use of terrestrial ecosystems, sustainably manage forests, combat desertification, and halt and reverse land degradation and halt biodiversity loss",0.7857142857142857,,0.14285714285714285,,0.07142857142857142,,
+16,"Promote peaceful and inclusive societies for sustainable development, provide access to justice for all and build effective, accountable and inclusive institutions at all levels",0.4166666666666667,,0.5416666666666666,,,0.041666666666666664,
+17,Strengthen the means of implementation and revitalize the Global Partnership for Sustainable Development,0.75,,0.20833333333333334,,,,0.041666666666666664
